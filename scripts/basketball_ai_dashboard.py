@@ -22,7 +22,20 @@ if "AST_RATIO" not in df.columns:
     df["AST_RATIO"] = df["AST"] / (df["AST"] + df["TO"])
     df["AST_RATIO"] = df["AST_RATIO"].fillna(0)  # Handles NaN values
 
-# 🔮 Predicting Future Points for Player
+# 🔍 Feature Scaling for Predictions
+features = ["FG%", "AST", "DREB", "OREB", "3P%", "EFF", "RPG", "APG", "SPG", "BPG", "PPR"]
+X = df[features].dropna()
+y = df.loc[X.index, "PTS"]
+
+scaler = StandardScaler()
+X_scaled = scaler.fit_transform(X)
+X_train, X_test, y_train, y_test = train_test_split(X_scaled, y, test_size=0.2, random_state=42)
+
+# 🌟 Train Ridge Regression Model
+ridge_model = Ridge(alpha=1.0)
+ridge_model.fit(X_train, y_train)
+
+# 🔮 Predicting Future Performance for Player
 def predict_future_performance(player_name):
     player_stats = df[df["Player"].str.lower() == player_name.lower()]  # Exact match
     if player_stats.empty:
@@ -32,8 +45,15 @@ def predict_future_performance(player_name):
     player_features_scaled = scaler.transform(player_features)  # Standardizing features
 
     predicted_pts = ridge_model.predict(player_features_scaled)[0]  # Predict future points
+    projected_fg = player_stats.iloc[0]["FG%"] * 1.05  # Assuming a slight improvement trend
 
-    return f"🔮 **Projected Points in Next Game:** **{predicted_pts:.2f}** _(Based on current trends and AI predictions)_"
+    return f"""
+    🔮 **Projected Performance for Next Game**  
+
+    📊 **Expected Points:** **{predicted_pts:.2f}**  
+    🎯 **Scoring Efficiency Estimate:** **{projected_fg:.2f}% FG**  
+    _(Based on AI prediction & player trends)_  
+    """
 
 # 🔍 Helper Function: Generate Player Report (Exact Match Fix)
 def generate_report(player_name):
@@ -88,30 +108,6 @@ if player_name:
     prediction = predict_future_performance(player_name)
     st.write(prediction)
 
-# 🔮 Predictive Model Setup
-features = ["FG%", "AST", "DREB", "OREB", "3P%", "EFF", "RPG", "APG", "SPG", "BPG", "PPR"]
-X = df[features].dropna()
-y = df.loc[X.index, "PTS"]
-
-# 🔍 Feature Scaling for Predictions
-scaler = StandardScaler()
-X_scaled = scaler.fit_transform(X)
-X_train, X_test, y_train, y_test = train_test_split(X_scaled, y, test_size=0.2, random_state=42)
-
-# 🌟 Ridge Regression Model
-ridge_model = Ridge(alpha=1.0)
-ridge_model.fit(X_train, y_train)
-
-# Predictions & Evaluation
-y_pred_ridge = ridge_model.predict(X_test)
-mae_ridge = mean_absolute_error(y_test, y_pred_ridge)
-r2_ridge = r2_score(y_test, y_pred_ridge)
-
-# 🔮 Coach-Friendly Prediction Summary
-st.subheader("🔮 Performance Prediction Accuracy")
-st.write(f"📊 **Expected Points Deviation:** ±{mae_ridge:.2f} _(Predictions are close but allow for slight variation)_")
-st.write(f"📈 **Trend Reliability:** **{r2_ridge:.0%}** _(Model captures trends but could improve with more data)_")
-
 # 🏀 Game Summary (Final Section)
 st.subheader("🏀 Team-Wide Insights")
 top_players = df.nlargest(3, "EFF")[["Player", "EFF", "PTS", "FG%", "TS%"]]
@@ -121,4 +117,4 @@ if top_players.empty:
 else:
     st.write(top_players)
 
-st.write("🚀 AI-powered basketball insights are now live!")
+st.write("AI-powered basketball insights are now live!")
