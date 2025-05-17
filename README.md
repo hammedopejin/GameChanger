@@ -1,6 +1,6 @@
 # 🏀 GameChanger Basketball AI Dashboard  
 
-## 🚀 Overview  
+##  Overview  
 GameChanger is an AI-powered basketball analytics tool that helps coaches assess player performance, track stats, and **predict future performance** using machine learning. The dashboard provides **player-specific insights** based on past game data, helping coaches **make data-driven decisions**.
 
 ---
@@ -77,19 +77,34 @@ This project utilizes the following Python libraries:
 
 ---
 
-## 🚀 **How to Run the Project**
+##  **How to Run the Project**
 ### **🔧 Installation & Setup**
-1️⃣ **Clone the repository**  
 ```bash
+# Clone the repository  
 git clone https://github.com/hammedopejin/GameChanger.git
-cd GameChanger
-pip install -r requirements.txt
-streamlit run basketball_ai_dashboard.py
+cd GameChanger  
 
-✔ The dashboard will launch in your browser! 🚀 ✔ Player insights, future predictions, and team analytics—all ready to go!
-📬 Feedback & Contributions
-If you have ideas for improvement or want to contribute: 1️⃣ Fork the repository 2️⃣ Submit a pull request with your changes 3️⃣ Open issues for feature requests
-📜 License
-This project is licensed under the MIT License. Feel free to use, modify, and improve!
+# Install dependencies  
+pip install -r requirements.txt  
 
-GameChanger is built to empower coaches & players with AI-driven insights.  Run it, test it, and let’s make basketball analytics smarter!
+# Run the Streamlit App  
+streamlit run basketball_ai_dashboard.py  
+
+✔ **The dashboard will launch in your browser!**   
+✔ **Player insights, future predictions, and team analytics—all ready to go!**  
+
+---
+
+## 📬 Feedback & Contributions  
+If you have ideas for improvement or want to contribute:  
+1️⃣ **Fork the repository**  
+2️⃣ **Submit a pull request with your changes**  
+3️⃣ **Open issues for feature requests**  
+
+---
+
+## 📜 License  
+This project is licensed under the **MIT License**. Feel free to use, modify, and improve!  
+
+ **GameChanger is built to empower coaches & players with AI-driven insights.**  
+ **Run it, test it, and let’s make basketball analytics smarter!**  
